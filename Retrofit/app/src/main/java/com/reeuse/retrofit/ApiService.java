@@ -27,11 +27,11 @@ import retrofit.mime.TypedFile;
 import retrofit.mime.TypedString;
 
 /**
- * ApiRequestInterface.java
+ * ApiService.java
  * <p/>
  * This interface contains all the API request list.
  */
-public interface ApiRequestInterface {
+public interface ApiService {
 
 
     @FormUrlEncoded

@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.reeuse.retrofit.helper.RetrofitHelper;
 import com.reeuse.retrofit.model.DeleteCallback;
 import com.reeuse.retrofit.model.ProductCollection;
 import com.reeuse.retrofit.model.Upload;
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getMethod() {
-        new RetrofitRequestHelper().getInstance().getProductCollection(new Callback<ProductCollection>() {
+        new RetrofitHelper().getInstance().getProductCollection(new Callback<ProductCollection>() {
             @Override
             public void success(ProductCollection productCollection, Response response) {
                 showToast("Product count: " + productCollection.getCount());
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void postMethod(Map<String, String> loginRequestParam) {
-        new RetrofitRequestHelper().getInstance().getUserDetails(loginRequestParam, new Callback<UserDetails>() {
+        new RetrofitHelper().getInstance().getUserDetails(loginRequestParam, new Callback<UserDetails>() {
             @Override
             public void success(UserDetails userDetails, Response response) {
 
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void deleteMethod(String deleteUserRequestParam) {
-        new RetrofitRequestHelper().getInstance().deleteUser(deleteUserRequestParam, new Callback<DeleteCallback>() {
+        new RetrofitHelper().getInstance().deleteUser(deleteUserRequestParam, new Callback<DeleteCallback>() {
             @Override
             public void success(DeleteCallback deleteCallback, Response response) {
                 showToast(deleteCallback.getMessage());
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void postMultiBodyMethod(String fileName,File imageFile) {
-        new RetrofitRequestHelper().getInstance().uploadImage(new TypedFile("image/*", imageFile), new TypedString(fileName), new Callback<Upload>() {
+        new RetrofitHelper().getInstance().uploadImage(new TypedFile("image/*", imageFile), new TypedString(fileName), new Callback<Upload>() {
             @Override
             public void success(Upload upload, Response response) {
 
