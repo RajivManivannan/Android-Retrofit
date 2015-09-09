@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/master
 package com.reeuse.retrofit.model;
 
 import com.google.gson.annotations.SerializedName;

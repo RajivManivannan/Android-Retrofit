@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/master
 package com.reeuse.retrofit.model;
 
 import android.os.Parcel;
