@@ -6,5 +6,6 @@
     <string name="get_request">GET</string>
     <string name="delete_request">DELETE</string>
     <string name="multi_body_request">Multi-body Upload</string>
+    <string name="custom_converter">Custom Converter</string>
     <string name="response">Response:</string>
 </resources>

@@ -12,17 +12,25 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.reeuse.retrofit.helper.RetrofitHelper;
 import com.reeuse.retrofit.model.DeleteCallback;
 import com.reeuse.retrofit.model.ProductCollection;
 import com.reeuse.retrofit.model.Upload;
 import com.reeuse.retrofit.model.UserDetails;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import retrofit.Callback;
@@ -46,8 +54,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         (findViewById(R.id.main_post_btn)).setOnClickListener(this);
         (findViewById(R.id.main_get_btn)).setOnClickListener(this);
         (findViewById(R.id.main_delete_btn)).setOnClickListener(this);
-        (pickBtn = (ImageButton)findViewById(R.id.main_img_button)).setOnClickListener(this);
+        (pickBtn = (ImageButton) findViewById(R.id.main_img_button)).setOnClickListener(this);
         (findViewById(R.id.main_upload_btn)).setOnClickListener(this);
+        (findViewById(R.id.main_custom_converter_btn)).setOnClickListener(this);
+
     }
 
     private void getMethod() {
@@ -95,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    private void postMultiBodyMethod(String fileName,File imageFile) {
+    private void postMultiBodyMethod(String fileName, File imageFile) {
         new RetrofitHelper().getInstance().uploadImage(new TypedFile("image/*", imageFile), new TypedString(fileName), new Callback<Upload>() {
             @Override
             public void success(Upload upload, Response response) {
@@ -109,7 +119,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    private void getCustomConverter() {
 
+        new RetrofitHelper().getInstance().getCollection(new Callback<String>() {
+            @Override
+            public void success(String stringResponse, Response response) {
+                JSONArray jsonArray = null;
+                try {
+                    JSONObject jsonObject = new JSONObject(stringResponse);
+                    jsonArray = jsonObject.getJSONArray("products");
+                    ArrayList<ProductCollection> productDetails = new Gson().fromJson(jsonArray.toString(), new TypeToken<List<ProductCollection>>() {
+                    }.getType());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+
+    }
 
 
     @Override
@@ -156,9 +188,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivityForResult(photoPickerIntent, SELECT_PHOTO);
                 break;
             case R.id.main_upload_btn:
-               if(imagePath!=null){
-                   postMultiBodyMethod("myImage",imagePath);
-               }else showToast("Pick Image to Upload");
+                if (imagePath != null) {
+                    postMultiBodyMethod("myImage", imagePath);
+                } else showToast("Pick Image to Upload");
+                break;
+            case R.id.main_custom_converter_btn:
+                getCustomConverter();
                 break;
         }
     }
@@ -167,9 +202,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-        switch(requestCode) {
+        switch (requestCode) {
             case SELECT_PHOTO:
-                if(resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     try {
                         final Uri imageUri = imageReturnedIntent.getData();
                         imagePath = new File(imageUri.getPath());

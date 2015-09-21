@@ -48,6 +48,9 @@ public interface ApiService {
     @GET("/getProduct")
     void getProductCollection(Callback<ProductCollection> callback);
 
+    @GET("/getProduct")
+    void getCollection(Callback<String> callback);
+
     @DELETE("/deleteUser")
     void deleteUser(@Query("userId") String userId, Callback<DeleteCallback> callback);
 

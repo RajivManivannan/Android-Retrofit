@@ -22,18 +22,18 @@ public class RetrofitHelper {
      * Webservice URL
      **/
     private static String API_URL = "http://52.74.116.126/rest/";
-    /**
-     * Google's JSON Parser GSON Instance
-     **/
-    private final Gson mGson;
+
 
     public RetrofitHelper() {
-        mGson = new GsonBuilder()
+        /** Google's JSON Parser GSON Instance */
+        Gson mGson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
         mApiService = new RestAdapter.Builder()
-                .setEndpoint(API_URL)
-                .setClient(new OkClient(new OkHttpClient()))
-                .setConverter(new GsonConverter(mGson))
+                .setEndpoint(API_URL) // API Endpoint url
+                .setClient(new OkClient(new OkHttpClient())) // Http client -OkHttpClient
+                .setConverter(new GsonConverter(mGson)) // Gson response converter
+                //.setConverter(new CustomConverter()) // custom response converter
+                .setLogLevel(RestAdapter.LogLevel.FULL)// To enable log.
                 .build()
                 .create(ApiService.class);
     }

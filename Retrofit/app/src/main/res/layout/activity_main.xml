@@ -44,5 +44,10 @@
         android:layout_height="wrap_content"
         android:text="@string/multi_body_request"
         android:id="@+id/main_upload_btn" />
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/custom_converter"
+        android:id="@+id/main_custom_converter_btn" />
 
 </LinearLayout>
