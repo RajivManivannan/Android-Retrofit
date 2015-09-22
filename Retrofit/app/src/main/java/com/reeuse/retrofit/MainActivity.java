@@ -14,11 +14,12 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.reeuse.retrofit.helper.RetrofitHelper;
 import com.reeuse.retrofit.model.DeleteCallback;
 import com.reeuse.retrofit.model.ProductCollection;
 import com.reeuse.retrofit.model.Upload;
 import com.reeuse.retrofit.model.UserDetails;
+import com.reeuse.retrofit.network.ApiManager;
+import com.reeuse.retrofit.network.ApiService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,12 +46,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final int SELECT_PHOTO = 101;
     private ImageButton pickBtn;
     private File imagePath;
+    private ApiManager apiManager;
+    ApiService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        apiManager = new ApiManager();
         (findViewById(R.id.main_post_btn)).setOnClickListener(this);
         (findViewById(R.id.main_get_btn)).setOnClickListener(this);
         (findViewById(R.id.main_delete_btn)).setOnClickListener(this);
@@ -61,7 +64,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getMethod() {
-        new RetrofitHelper().getInstance().getProductCollection(new Callback<ProductCollection>() {
+
+
+        apiService = apiManager.getApiManagerGson();
+        apiService.getProductCollection(new Callback<ProductCollection>() {
             @Override
             public void success(ProductCollection productCollection, Response response) {
                 showToast("Product count: " + productCollection.getCount());
@@ -75,7 +81,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void postMethod(Map<String, String> loginRequestParam) {
-        new RetrofitHelper().getInstance().getUserDetails(loginRequestParam, new Callback<UserDetails>() {
+        apiService = apiManager.getApiManagerGson();
+        apiService.getUserDetails(loginRequestParam, new Callback<UserDetails>() {
             @Override
             public void success(UserDetails userDetails, Response response) {
 
@@ -91,7 +98,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void deleteMethod(String deleteUserRequestParam) {
-        new RetrofitHelper().getInstance().deleteUser(deleteUserRequestParam, new Callback<DeleteCallback>() {
+        apiService = apiManager.getApiManagerGson();
+        apiService.deleteUser(deleteUserRequestParam, new Callback<DeleteCallback>() {
             @Override
             public void success(DeleteCallback deleteCallback, Response response) {
                 showToast(deleteCallback.getMessage());
@@ -106,7 +114,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void postMultiBodyMethod(String fileName, File imageFile) {
-        new RetrofitHelper().getInstance().uploadImage(new TypedFile("image/*", imageFile), new TypedString(fileName), new Callback<Upload>() {
+        apiService = apiManager.getApiManagerGson();
+        apiService.uploadImage(new TypedFile("image/*", imageFile), new TypedString(fileName), new Callback<Upload>() {
             @Override
             public void success(Upload upload, Response response) {
 
@@ -120,8 +129,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getCustomConverter() {
-
-        new RetrofitHelper().getInstance().getCollection(new Callback<String>() {
+        apiService = apiManager.getApiManagerCustom();
+        apiService.getCollection(new Callback<String>() {
             @Override
             public void success(String stringResponse, Response response) {
                 JSONArray jsonArray = null;

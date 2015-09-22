@@ -1,5 +1,5 @@
 
-package com.reeuse.retrofit;
+package com.reeuse.retrofit.network;
 
 
 import com.reeuse.retrofit.model.DeleteCallback;
